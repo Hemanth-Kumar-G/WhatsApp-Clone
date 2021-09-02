@@ -19,15 +19,21 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.hemanthdev.whatsappclone.ui.theme.WhatsAppCloneTheme
 import com.hemanthdev.whatsappclone.ui.theme.splashColor
 
 
+
 @ExperimentalUnitApi
-@Preview(showBackground = true)
 @Composable
 fun SplashScreen(
+    login: () -> Unit,
+    splashViewModel: SplashViewModel = hiltViewModel()
 ) {
+    splashViewModel.launchNext(login)
+
     WhatsAppCloneTheme {
         Column(
             modifier = Modifier
@@ -53,7 +59,7 @@ fun SplashScreen(
                 textAlign = TextAlign.Center,
                 style = TextStyle(letterSpacing = TextUnit(.2f, TextUnitType.Em)),
 
-            )
+                )
         }
     }
 }
