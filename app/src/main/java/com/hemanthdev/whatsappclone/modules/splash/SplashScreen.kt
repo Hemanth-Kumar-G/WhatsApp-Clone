@@ -25,7 +25,6 @@ import com.hemanthdev.whatsappclone.ui.theme.WhatsAppCloneTheme
 import com.hemanthdev.whatsappclone.ui.theme.splashColor
 
 
-
 @ExperimentalUnitApi
 @Composable
 fun SplashScreen(
@@ -45,9 +44,7 @@ fun SplashScreen(
             Text(
                 text = buildAnnotatedString {
                     withStyle(
-                        SpanStyle(
-                            fontSize = 14.sp
-                        )
+                        SpanStyle(fontSize = 14.sp)
                     ) {
                         append("Welcome to")
                     }
@@ -58,8 +55,7 @@ fun SplashScreen(
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 style = TextStyle(letterSpacing = TextUnit(.2f, TextUnitType.Em)),
-
-                )
+            )
         }
     }
 }

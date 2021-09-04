@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
  */
 const val SPLASH_SCREEN = "splash_screen"
 const val LOGIN_SCREEN = "login_screen"
+const val REGISTRATION_SCREEN = "registration_screen"
+const val HOME_SCREEN = "home_screen"
 
 
 /**
@@ -24,5 +26,20 @@ class Action(navController: NavHostController) {
                 inclusive = true
             }
         }
+    }
+
+    val home: () -> Unit = {
+        navController.navigate(HOME_SCREEN) {
+            popUpTo(REGISTRATION_SCREEN) {
+                inclusive = true
+            }
+            popUpTo(LOGIN_SCREEN) {
+                inclusive = true
+            }
+        }
+    }
+
+    val registration: () -> Unit = {
+        navController.navigate(REGISTRATION_SCREEN)
     }
 }
