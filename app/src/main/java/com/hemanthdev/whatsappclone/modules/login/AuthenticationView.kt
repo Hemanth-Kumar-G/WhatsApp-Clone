@@ -1,5 +1,6 @@
 package com.hemanthdev.whatsappclone.modules.login
 
+import android.app.Activity
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -9,119 +10,159 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.hemanthdev.whatsappclone.ui.composbles.CircularIndicatorMessage
+import com.hemanthdev.whatsappclone.ui.composbles.SnackbarCustom
 import com.hemanthdev.whatsappclone.ui.theme.*
 import io.github.farhanroy.cccp.CountryCodeDialog
+import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
-//@Preview(showBackground = true)
 @Composable
-fun AuthenticationView(signUp: () -> Unit) {
+fun AuthenticationView(
+    signUp: () -> Unit,
+    home: () -> Unit,
+    authenticationViewModel: AuthenticationViewModel = hiltViewModel()
+) {
 
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-    val phoneNumber = remember { mutableStateOf(TextFieldValue()) }
-    val continueBtnVisibility = remember {
-        mutableStateOf(true)
-    }
-    val verifyBtnVisibility = remember {
-        mutableStateOf(false)
-    }
-    val otpVisibility = remember {
-        mutableStateOf(false)
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = SnackbarHostState()
+
+    val loading: Boolean by authenticationViewModel.loading.observeAsState(initial = false)
+    val showMessage: Boolean by authenticationViewModel.showMessage.observeAsState(initial = false)
+    val otpSent: Boolean by authenticationViewModel.otpSent.observeAsState(initial = false)
+    val message: String by authenticationViewModel.message.observeAsState(initial = "")
+    val phoneNumber: String by authenticationViewModel.phoneNumber.observeAsState(initial = "")
+
+
+    val showSnackbar = {
+        coroutineScope.launch {
+            when (snackbarHostState.showSnackbar(
+                message = message
+            )) {
+                SnackbarResult.ActionPerformed -> {
+                    authenticationViewModel.snackbarDismissed()
+                }
+                SnackbarResult.Dismissed -> {
+                    authenticationViewModel.snackbarDismissed()
+                }
+            }
+        }
     }
 
+    if (showMessage) {
+        Log.e("TAG", "AuthenticationView: $message")
+        showSnackbar()
+    }
 
     WhatsAppCloneTheme {
 
         Surface(color = MaterialTheme.colors.background) {
-            Scaffold() {
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 15.dp, vertical = 30.dp)
+            Scaffold(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Text(
-                        text = "Welcome to Whatsapp",
-                        textAlign = TextAlign.Center,
-                        style = black20Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(50.dp))
-
-                    Text(
-                        text = "Enter your phone number to continue",
-                        textAlign = TextAlign.Center,
-                        style = gray15
-                    )
-
-                    TextField(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp),
-                        value = phoneNumber.value,
-                        textStyle = black20Bold,
-                        leadingIcon = {
-                            CountryCodeDialog(
-                                pickedCountry = {
-                                    Log.e("CountryCodeDialog ", "${it.name} ${it.phoneCode}")
-                                })
-                        },
-                        onValueChange = {
-                            phoneNumber.value = it
-                        },
-                        placeholder = {
-                            Text(
-                                "9845xxxxxxxx",
-                                style = gray20
-                            )
-                        },
-                        singleLine = true,
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.White,
-                            unfocusedIndicatorColor = Color.Gray
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                            }
+                            .fillMaxSize()
+                            .padding(horizontal = 15.dp, vertical = 30.dp)
+                    ) {
+                        Text(
+                            text = "Welcome to Whatsapp",
+                            textAlign = TextAlign.Center,
+                            style = black20Bold
                         )
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
 
-                    Otp(visibility = otpVisibility.value)
+                        Spacer(modifier = Modifier.height(50.dp))
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = "Enter your phone number to continue",
+                            textAlign = TextAlign.Center,
+                            style = gray15
+                        )
 
-                    ButtonCompose(
-                        text = "Continue",
-                        visibility = continueBtnVisibility.value
-                    ) {
-                        otpVisibility.value = true
-                        verifyBtnVisibility.value = true
-                        continueBtnVisibility.value = false
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            value = phoneNumber,
+                            textStyle = black20Bold,
+                            leadingIcon = {
+                                CountryCodeDialog(
+                                    pickedCountry = {
+                                        authenticationViewModel.country = it
+                                        Log.e("CountryCodeDialog ", "${it.name} ${it.phoneCode}")
+                                    })
+                            },
+                            onValueChange = {
+                                authenticationViewModel.onPhoneNumberChange(it)
+                            },
+                            placeholder = {
+                                Text(
+                                    "98XXXXXXXX",
+                                    style = gray20
+                                )
+                            },
+                            singleLine = true,
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.White,
+                                unfocusedIndicatorColor = Color.Gray
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    focusManager.clearFocus()
+                                }
+                            )
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Otp(home = home, signUp = signUp)
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                        ButtonCompose(
+                            text = "Continue",
+                            visibility = otpSent.not()
+                        ) {
+                            if (context is Activity) {
+                                authenticationViewModel.sendOTPToPhoneNumber(context)
+                            }
+                        }
+
+                        ButtonCompose(
+                            text = "Verify",
+                            visibility = otpSent
+                        ) {
+                            authenticationViewModel.verifyOTP(home, signUp)
+                        }
                     }
-                    ButtonCompose(
-                        text = "Verify",
-                        visibility = verifyBtnVisibility.value
-                    ) {
-                        signUp()
+                    if (loading) {
+                        CircularIndicatorMessage(
+                            message = "Please Wait"
+                        )
                     }
+                    SnackbarCustom(snackbarHostState)
                 }
             }
         }
@@ -131,14 +172,16 @@ fun AuthenticationView(signUp: () -> Unit) {
 @ExperimentalAnimationApi
 @Composable
 fun Otp(
-    visibility: Boolean
+    home: () -> Unit,
+    signUp: () -> Unit,
+    authenticationViewModel: AuthenticationViewModel = hiltViewModel()
 ) {
-    AnimatedVisibility(visible = visibility) {
+    val focusManager = LocalFocusManager.current
 
+    val otpSent: Boolean by authenticationViewModel.otpSent.observeAsState(initial = false)
+    val otp: String by authenticationViewModel.otp.observeAsState(initial = "")
 
-        val otp = remember { mutableStateOf(TextFieldValue()) }
-        val maxChar = 4
-        val focusManager = LocalFocusManager.current
+    AnimatedVisibility(visible = otpSent) {
 
         Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -148,10 +191,9 @@ fun Otp(
             )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = otp.value,
+                value = otp,
                 onValueChange = {
-                    if (it.text.length <= maxChar)
-                        otp.value = it
+                    authenticationViewModel.onOTPChange(it)
                 },
                 textStyle = black20Bold,
                 singleLine = true,
@@ -168,6 +210,7 @@ fun Otp(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
+                        authenticationViewModel.verifyOTP(home, signUp)
                     }
                 ),
                 colors = TextFieldDefaults.outlinedTextFieldColors(

@@ -19,6 +19,7 @@ val Typography = Typography(
 val black20Bold = TextStyle(
     fontFamily = FontFamily.Default,
     fontWeight = FontWeight.Bold,
+    color = Color.Black,
     fontSize = 20.sp
 )
 
@@ -41,4 +42,14 @@ val black15Bold = TextStyle(
     color = Color.Black,
     fontSize = 15.sp,
     fontWeight = FontWeight.Bold,
+)
+
+val actionBold = TextStyle(
+    fontWeight = FontWeight.Bold,
+    color = LightGreen
+)
+
+val black15 = TextStyle(
+    color = Color.Black,
+    fontSize = 15.sp
 )
