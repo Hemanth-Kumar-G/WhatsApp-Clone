@@ -28,11 +28,17 @@ import com.hemanthdev.whatsappclone.ui.theme.splashColor
 @ExperimentalUnitApi
 @Composable
 fun SplashScreen(
+    home: () -> Unit,
     login: () -> Unit,
+    registration: () -> Unit,
     splashViewModel: SplashViewModel = hiltViewModel()
 ) {
-    splashViewModel.launchNext(login)
 
+    splashViewModel.checkIfUserLoggedIn(
+        home = home,
+        login = login,
+        registration = registration
+    )
     WhatsAppCloneTheme {
         Column(
             modifier = Modifier

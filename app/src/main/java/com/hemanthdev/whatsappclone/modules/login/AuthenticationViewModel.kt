@@ -176,27 +176,27 @@ class AuthenticationViewModel @Inject constructor(
                         countryName = country?.name!!,
                         countryNameCode = country?.nameCode!!,
                         countryPhoneCode = country?.phoneCode!!,
-                        lastLoggedIn = utility.currentTimeStamp(),
-                        appVersion = utility.applicationVersion(),
-                        deviceId = utility.getDeviceId(),
-                        deviceModel = utility.deviceModel(),
-                        deviceOs = utility.systemOS(),
+                        lastLoggedIn = utility.currentTimeStamp,
+                        appVersion = utility.applicationVersion,
+                        deviceId = utility.deviceId,
+                        deviceModel = utility.deviceModel,
+                        deviceOs = utility.systemOS,
                         userId = user.uid
                     )
                     firestoreUtility.checksForUserDetails(
                         callbacks = object : FirestoreCallbacks {
                             override fun isFalse() {
-                                userDetails.accountCreatedOn = utility.currentTimeStamp()
+                                userDetails.accountCreatedOn = utility.currentTimeStamp
                                 userDetails.profilePic = defaultPic.shuffled().first()
                                 updateUserDetails(userDetails, home, signUp, true)
                             }
 
                             override fun userDetails(user: User) {
-                                user.lastLoggedIn = utility.currentTimeStamp()
-                                user.appVersion = utility.applicationVersion()
-                                user.deviceId = utility.getDeviceId()
-                                user.deviceModel = utility.deviceModel()
-                                user.deviceOs = utility.systemOS()
+                                user.lastLoggedIn = utility.currentTimeStamp
+                                user.appVersion = utility.applicationVersion
+                                user.deviceId = utility.deviceId
+                                user.deviceModel = utility.deviceModel
+                                user.deviceOs = utility.systemOS
                                 updateUserDetails(user, home, signUp, !user.isDetailsAdded)
                             }
 
