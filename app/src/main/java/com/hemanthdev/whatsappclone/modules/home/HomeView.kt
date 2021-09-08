@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,14 +24,9 @@ import com.hemanthdev.whatsappclone.R
 import com.hemanthdev.whatsappclone.modules.home.chat.ChatView
 import com.hemanthdev.whatsappclone.modules.home.search.SearchView
 import com.hemanthdev.whatsappclone.modules.home.status.StatusView
-import com.hemanthdev.whatsappclone.modules.login.AuthenticationView
-import com.hemanthdev.whatsappclone.modules.registration.RegistrationView
-import com.hemanthdev.whatsappclone.modules.splash.SplashScreen
 import com.hemanthdev.whatsappclone.ui.theme.LightGreen
 import com.hemanthdev.whatsappclone.ui.theme.WhatsAppCloneTheme
 import com.hemanthdev.whatsappclone.ui.theme.black15Bold
-import com.hemanthdev.whatsappclone.ui.theme.black20Bold
-import com.hemanthdev.whatsappclone.utils.Action
 import com.hemanthdev.whatsappclone.utils.LOGIN_SCREEN
 import com.hemanthdev.whatsappclone.utils.REGISTRATION_SCREEN
 import com.hemanthdev.whatsappclone.utils.SPLASH_SCREEN
