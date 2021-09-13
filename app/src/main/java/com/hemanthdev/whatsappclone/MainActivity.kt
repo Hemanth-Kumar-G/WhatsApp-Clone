@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hemanthdev.whatsappclone.modules.home.HomeView
 import com.hemanthdev.whatsappclone.modules.login.AuthenticationView
+import com.hemanthdev.whatsappclone.modules.profile.ProfileView
 import com.hemanthdev.whatsappclone.modules.registration.RegistrationView
 import com.hemanthdev.whatsappclone.modules.splash.SplashScreen
 import com.hemanthdev.whatsappclone.ui.theme.WhatsAppCloneTheme
@@ -24,8 +25,8 @@ class MainActivity : ComponentActivity() {
 
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
-       super.onCreate(savedInstanceState)
-       setContent {
+        super.onCreate(savedInstanceState)
+        setContent {
             WhatsAppCloneTheme {
                 val navController = rememberNavController()
                 val actions = remember(navController) { Action(navController) }
@@ -50,7 +51,12 @@ class MainActivity : ComponentActivity() {
                         RegistrationView(home = actions.home)
                     }
                     composable(route = HOME_SCREEN) {
-                        HomeView()
+                        HomeView(profile = actions.profile)
+                    }
+                    composable(route = PROFILE_SCREEN) {
+                        ProfileView(
+                            back = actions.back
+                        )
                     }
                 }
             }

@@ -9,6 +9,7 @@ const val SPLASH_SCREEN = "splash_screen"
 const val LOGIN_SCREEN = "login_screen"
 const val REGISTRATION_SCREEN = "registration_screen"
 const val HOME_SCREEN = "home_screen"
+const val PROFILE_SCREEN = "profile_screen"
 
 
 /**
@@ -36,10 +37,19 @@ class Action(navController: NavHostController) {
             popUpTo(LOGIN_SCREEN) {
                 inclusive = true
             }
+            popUpTo(SPLASH_SCREEN) {
+                inclusive = true
+            }
         }
     }
 
     val registration: () -> Unit = {
         navController.navigate(REGISTRATION_SCREEN)
     }
+
+    val profile: () -> Unit = {
+        navController.navigate(PROFILE_SCREEN)
+    }
+
+    val back: () -> Unit = { navController.popBackStack() }
 }

@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -31,12 +30,10 @@ import com.hemanthdev.whatsappclone.utils.LOGIN_SCREEN
 import com.hemanthdev.whatsappclone.utils.REGISTRATION_SCREEN
 import com.hemanthdev.whatsappclone.utils.SPLASH_SCREEN
 
-
 @ExperimentalAnimationApi
 @ExperimentalUnitApi
-@Preview(showBackground = true)
 @Composable
-fun HomeView() {
+fun HomeView(profile: () -> Unit) {
     val navController = rememberNavController()
     WhatsAppCloneTheme {
 
@@ -44,7 +41,9 @@ fun HomeView() {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
-                    TopBar()
+                    TopBar {
+                        profile()
+                    }
                 },
                 bottomBar = {
                     BottomBar(navController = navController)
@@ -78,7 +77,9 @@ fun HomeView() {
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(
+    onProfileClick: () -> Unit
+) {
     TopAppBar(
         title = {
             Row(
@@ -92,7 +93,7 @@ fun TopBar() {
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(0.9f)
                 )
-                IconButton(onClick = { }) {
+                IconButton(onClick = { onProfileClick() }) {
                     Icon(
                         imageVector = Icons.Filled.Person,
                         contentDescription = "profile"
