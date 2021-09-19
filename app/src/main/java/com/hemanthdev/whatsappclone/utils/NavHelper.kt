@@ -1,6 +1,7 @@
 package com.hemanthdev.whatsappclone.utils
 
 import androidx.navigation.NavHostController
+import com.hemanthdev.whatsappclone.utils.DocumentField.userId
 
 /**
  * A set of destination used in the whole application
@@ -10,6 +11,7 @@ const val LOGIN_SCREEN = "login_screen"
 const val REGISTRATION_SCREEN = "registration_screen"
 const val HOME_SCREEN = "home_screen"
 const val PROFILE_SCREEN = "profile_screen"
+const val CHAT_USER = "chatUser/{${userId}}"
 
 
 /**
@@ -52,4 +54,7 @@ class Action(navController: NavHostController) {
     }
 
     val back: () -> Unit = { navController.popBackStack() }
+
+    val chatUser: (userId: String) -> Unit =
+        { userId -> navController.navigate("chatUser/$userId") }
 }

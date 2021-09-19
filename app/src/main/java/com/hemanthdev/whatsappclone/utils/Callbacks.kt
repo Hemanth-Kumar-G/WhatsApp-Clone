@@ -84,5 +84,10 @@ interface FirestoreCallbacks {
      */
     fun onError(message: String) = Unit
 
+    /**
+     * User list
+     */
+    fun userList(users: List<User>) {}
+
 
 }

@@ -33,7 +33,10 @@ import com.hemanthdev.whatsappclone.utils.SPLASH_SCREEN
 @ExperimentalAnimationApi
 @ExperimentalUnitApi
 @Composable
-fun HomeView(profile: () -> Unit) {
+fun HomeView(
+    profile: () -> Unit,
+    userMessage: (userId: String) -> Unit
+) {
     val navController = rememberNavController()
     WhatsAppCloneTheme {
 
@@ -63,7 +66,7 @@ fun HomeView(profile: () -> Unit) {
                             ChatView()
                         }
                         composable(NavigationItem.Search.route) {
-                            SearchView()
+                            SearchView(userMessage = userMessage)
                         }
                         composable(NavigationItem.Status.route) {
                             StatusView()

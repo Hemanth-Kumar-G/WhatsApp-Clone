@@ -53,3 +53,13 @@ val black15 = TextStyle(
     color = Color.Black,
     fontSize = 15.sp
 )
+
+val link15 = TextStyle(
+    color = Color.Blue,
+    fontSize = 20.sp,
+)
+
+val lightGray15 = TextStyle(
+    color = Color.LightGray,
+    fontSize = 15.sp,
+)

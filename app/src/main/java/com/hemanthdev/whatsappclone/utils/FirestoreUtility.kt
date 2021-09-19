@@ -86,4 +86,31 @@ class FirestoreUtility @Inject constructor() {
                 }
             }
     }
+
+    fun allUsers(getCurrentAlso: Boolean = false, callbacks: FirestoreCallbacks) {
+        db.collection(users)
+            .whereNotEqualTo(
+                DocumentField.userId, if (getCurrentAlso) "" else currentUserId
+            )
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    callbacks.onError(e.localizedMessage ?: "")
+                    return@addSnapshotListener
+                }
+
+                val users = ArrayList<User>()
+                if (value != null) {
+                    for (doc in value) {
+                        users.add(doc.toObject())
+                    }
+
+                    users.sortBy { it.name }
+
+                    callbacks.userList(users = users)
+                } else {
+                    callbacks.onError("")
+                }
+            }
+    }
+
 }

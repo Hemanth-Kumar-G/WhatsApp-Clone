@@ -51,7 +51,10 @@ class MainActivity : ComponentActivity() {
                         RegistrationView(home = actions.home)
                     }
                     composable(route = HOME_SCREEN) {
-                        HomeView(profile = actions.profile)
+                        HomeView(
+                            profile = actions.profile,
+                            userMessage = actions.chatUser
+                            )
                     }
                     composable(route = PROFILE_SCREEN) {
                         ProfileView(
