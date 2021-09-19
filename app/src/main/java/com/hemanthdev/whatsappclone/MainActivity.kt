@@ -55,7 +55,8 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = PROFILE_SCREEN) {
                         ProfileView(
-                            back = actions.back
+                            back = actions.back,
+                            splash = actions.splash
                         )
                     }
                 }

@@ -63,4 +63,27 @@ class FirestoreUtility @Inject constructor() {
             }
     }
 
+    fun signOut() {
+        firebaseAuth.signOut()
+    }
+
+    fun userDetailsListener(callbacks: FirestoreCallbacks) {
+        db.collection(users).document(currentUserId)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    callbacks.onError(e.localizedMessage ?: "")
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val data = snapshot.toObject<User>()
+                    if (data != null) {
+                        callbacks.userDetails(user = data)
+                    } else {
+                        callbacks.onError("")
+                    }
+                } else {
+                    callbacks.onError("")
+                }
+            }
+    }
 }
